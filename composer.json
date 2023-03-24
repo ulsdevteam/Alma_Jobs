@@ -1,0 +1,15 @@
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/ulsdevteam/php-alma-client"
+        }
+    ],
+    "require": {
+        "scriptotek/alma-client": "master",
+        "php-http/guzzle6-adapter": "^2.0",
+        "http-interop/http-factory-guzzle": "^1.0"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

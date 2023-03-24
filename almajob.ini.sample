@@ -1,0 +1,28 @@
+#---------------------------------------------------------
+# almajob.ini
+#---------------------------------------------------------
+#
+# api_key_production - The API Key that has r/w access to 
+#   'Configuration and Administration' in Alma for Production
+#
+# api_key_sandobx - The API Key that has r/w access to
+#   'Configuration and Administration' in Alma for Sandbox
+#
+api_key_production = 
+api_key_sandbox = 
+#
+#
+# domaina - The domain of where you are running this from.
+#           Valid choices are:
+#               'na' - North America
+#               'eu' - Europe
+#               'ap' - Asia/Pasific
+#               'ca' - Canada
+#               'cn' - China
+#
+domain = na
+#
+#
+#--------------------------------------------------------
+# End
+#--------------------------------------------------------
