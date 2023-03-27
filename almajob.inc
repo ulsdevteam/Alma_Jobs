@@ -1,5 +1,9 @@
 <?php
 
+require_once('vendor/autoload.php');
+use Scriptotek\Alma\Client as AlmaClient;
+use Scriptotek\Alma\Sru\Client as SruClient;
+
 #-----------------------------------------------------------
 # Functions
 #-----------------------------------------------------------
