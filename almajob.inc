@@ -177,4 +177,3 @@ function getJobStatuses ($client)
     return($jobstatuses);
 }
 
-?>

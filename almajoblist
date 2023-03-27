@@ -5,8 +5,8 @@
  * 
  */
 
-require_once('vendor/autoload.php');
 require_once('almajob.inc');
+require_once('vendor/autoload.php');
 use Scriptotek\Alma\Client as AlmaClient;
 use Scriptotek\Alma\Sru\Client as SruClient;
 
@@ -22,11 +22,9 @@ $api_key_production = $config['api_key_production'];
 $api_key_sandbox = $config['api_key_sandbox'];
 $domain  = $config['domain'];
 
-
 #--------------------------------------------------------------
 # Read command line options.
 #--------------------------------------------------------------
-
 $shortopts = "";
 $longopts = array(
     "env:",

@@ -5,10 +5,10 @@
  * 
  */
 
+require_once('almajob.inc');
 require_once('vendor/autoload.php');
 use Scriptotek\Alma\Client as AlmaClient;
 use Scriptotek\Alma\Sru\Client as SruClient;
-require_once('almajob.inc');
 
 #--------------------------------------------------------------
 # Main Program

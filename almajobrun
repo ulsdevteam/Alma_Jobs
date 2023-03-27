@@ -5,8 +5,8 @@
  * 
  */
 
-require_once('vendor/autoload.php');
 require_once('almajob.inc');
+require_once('vendor/autoload.php');
 use Scriptotek\Alma\Client as AlmaClient;
 use Scriptotek\Alma\Sru\Client as SruClient;
 
@@ -25,7 +25,6 @@ $domain  = $config['domain'];
 #--------------------------------------------------------------
 # Read command line options.
 #--------------------------------------------------------------
-
 $shortopts = "";
 $longopts = array(
     "name:",
