@@ -1,0 +1,258 @@
+#!/usr/bin/php 
+<?php
+/*
+ * almajob
+ * 
+ */
+
+require_once('almajob.inc');
+require_once('vendor/autoload.php');
+use Scriptotek\Alma\Client as AlmaClient;
+use Scriptotek\Alma\Sru\Client as SruClient;
+
+#--------------------------------------------------------------
+# Main Program
+#--------------------------------------------------------------
+
+# Read settings from ini file.
+print "Reading Configuration settings from file almajob.ini\n";
+$config_file = 'almajob.ini';
+$config = parse_ini_file($config_file,true);
+$api_key_production = $config['api_key_production'];
+$api_key_sandbox = $config['api_key_sandbox'];
+$domain  = $config['domain'];
+
+#--------------------------------------------------------------
+# Read command line options.
+#--------------------------------------------------------------
+$shortopts = "";
+$longopts = array(
+    "cmd:",
+    "env:",
+    "job:",
+    "id:",
+);
+
+$opts = getopt($shortopts, $longopts);
+foreach (array_keys($opts) as $opt) switch ($opt) {
+    case 'cmd':
+      $cmd_opt = $opts['cmd'];
+      break;
+    case 'env':
+      $env_opt = $opts['env'];
+      break;
+    case 'job':
+      $job_opt = $opts['job'];
+      break;
+    case 'id':
+      $id_opt = $opts['id'];
+      break;
+}
+
+#-----------------------------------------------------
+# Validate command line options.
+#-----------------------------------------------------
+if ( empty($env_opt) ) {
+    print "Usage: \n  almajob --env {production|sandbox} --cmd {list|run|status}\n\n";
+    print "  Error: Missing \"--env\" option.\n";
+    exit(1);
+}
+
+if (($env_opt != 'production') && ($env_opt != 'sandbox')) {
+    print "Usage: \n  almajob --env {production|sandbox} --cmd {list|run|status}\n\n";
+    print "  Error: Option \"--env\" must be either \"production\" or \"sandbox\".\n";
+    exit(1);
+}
+
+if ( empty($cmd_opt) ) {
+    print "Usage: \n  almajob --env {production|sandbox} --cmd {list|run|status}\n\n";
+    print "  Error: Option \"--cmd\" must be one of \"list\", \"run\", or \"status\".\n";
+    exit(1);
+}
+
+if ( $cmd_opt == "list" ) {
+    # No additional parameters needed.
+}
+
+if ( $cmd_opt == "run" ) {
+    # Ensure we have "--name" as a parameter.
+    if ( empty($job_opt) ) {
+        print "Usage: \n  almajob --env {production|sandbox} --cmd run --job \"{job}\"\n\n";
+        print "  Error: The \"--cmd run\" option requires the \"--job {name}\" option.\n";
+        exit(1);
+    }
+}
+
+if ( $cmd_opt == "status" ) {
+    # Ensure we have both "--name" and "--id" as parameters.
+    if ((empty($job_opt)) || (empty($id_opt))) {
+        print "Usage: \n  almajob --env {production|sandbox} --cmd status --job \"{job}\" --id \"{id}\"\n\n";
+        print "  Error: The \"--cmd status\" option requires both \"--job {name}\" and \"--id {identifier}\" options.\n";
+        exit(1);
+    }
+}
+
+#-----------------------------------------------------
+# Set environment API Key.
+#-----------------------------------------------------
+if ($env_opt == "production") {
+   $api_key = $api_key_production;
+}
+if ($env_opt == "sandbox") {
+   $api_key = $api_key_sandbox;
+}
+
+#-----------------------------------------------------
+# Create Alma Client.
+#-----------------------------------------------------
+$alma = new AlmaClient($api_key, $domain);
+
+#-----------------------------------------------------
+# Get and Store the list of current Jobs.
+#-----------------------------------------------------
+$jobs = array();
+
+# File to cache array of jobs.
+$jobs_cache = ".cache.jobs.$env_opt";
+
+# Get List of Jobs either by cache or directly from Alma.
+# Cache is set for a number of seconds (60 sec * 1440 min) = 1 day.
+if (file_exists($jobs_cache) && (filemtime($jobs_cache) > (time() - 60 * 1440 ))) {
+    # Retrieve list of jobs from Cache;
+    print "Loading Jobs from Cache...\n";
+    $jobs = unserialize(file_get_contents($jobs_cache));
+} else {
+    # Retrieve current list of jobs from Alma:
+    print "Loading Jobs from Alma...\n";
+    $alma->jobs->setPaginationLimit( 100 );
+    foreach ($alma->jobs as $job) {
+        array_push($jobs, array('ID' => $job->id,'NAME' => $job->name, 'DESC' => $job->description, 'LINK' => $job->link));
+    } 
+    file_put_contents($jobs_cache, serialize($jobs), LOCK_EX);
+}
+
+#---------------------------------------------
+# Get List of Job Statuses
+#---------------------------------------------
+$statuses = getJobStatuses($alma);
+
+#---------------------------------------------
+# Perform the requested task.
+#---------------------------------------------
+if ($cmd_opt == "list") {
+    #---------------------------------------------
+    # Search for job name in list of jobs.
+    #---------------------------------------------
+    foreach ($jobs as $job) {
+        $job_id = $job['ID'];
+        $job_name = $job['NAME'];
+        print "ID: $job_id\t\tName: $job_name\n";
+    }
+}
+# End cmd_opt == "list"
+
+if ($cmd_opt == "run") {
+    #---------------------------------------------
+    # Run a job.
+    #---------------------------------------------
+    print "Execute Job: $job_opt\n";
+    $key = searchForName($job_opt, $jobs);
+
+    $job_name = "";
+    $job_id = "";
+
+    if ($key) {
+        $job_id = $jobs[$key]['ID'];
+        $job_name = $jobs[$key]['NAME'];
+        print "     Job ID: $job_id\n";
+
+        if ($job_id) {
+            # Execute the job.
+            $job = $alma->jobs[$job_id];
+            try {
+                $job_instance = $job->submit();
+            } catch(Exception $e) {
+                print "Unable to execute Job: $job_name\n";
+                print $e->getMessage()."\n";
+                exit(1);
+            }
+
+            # Obtain the JSON response from submitting the job.
+            $obj = json_decode($job_instance);
+
+            # Obtain the Instance ID/Information [additional_info]
+            #$additional_info = $obj->additional_info;
+            $instance_id = basename($obj->additional_info->link);
+
+            # Executed Job was:
+            print "Job Instance ID: $instance_id\n";
+
+            # Get Job and Instance Status
+            $instance = $job->instances[$instance_id];
+            $instance->init();
+            $instance_info = json_encode($instance);
+
+            $job_submit_time = zuluToLocal($instance->submit_time);
+            $job_start_time = zuluToLocal($instance->start_time);
+            print "Job Submited:  $job_submit_time\n";
+        }
+    } else {
+        print "Unable to find job name: $job_opt\n";
+        exit(1);
+    }
+}
+# End cmd_opt == "run"
+
+if ($cmd_opt == "status") {
+    #---------------------------------------------
+    # Get the status for an instance of a job.
+    #---------------------------------------------
+    print "Checking...\n";
+    print "     Job Name:           '$job_opt'\n";
+    $key = searchForName($job_opt, $jobs);
+
+    $job_id = "";
+    $job_name = "";
+    $job_instance = "";
+
+    if ($key) {
+        $job_id = $jobs[$key]['ID'];
+        $job_name = $jobs[$key]['NAME'];
+        $job_instance_id = $id_opt;
+
+        print "     Job ID:             $job_id\n";
+
+        if ($job_id) {
+            $job = $alma->jobs[$job_id];
+
+            # Executed Job was:
+            print "     Job Instance ID:    $job_instance_id\n";
+
+            # Get Job and Instance Status
+            $instance = $job->instances[$job_instance_id];
+            $instance->init();
+            $instance_info = json_encode($instance);
+
+            $job_submit_time = zuluToLocal($instance->submit_time);
+            $job_start_time = zuluToLocal($instance->start_time);
+            print "     Job Submited:       $job_submit_time\n";
+
+            $j_status = instanceStatus($api_key, $domain, $job_id, $job_instance_id);
+            $desc = $statuses[$j_status];
+            print "     Job Status:         $j_status - $desc\n";
+        }
+
+    } else {
+        print "Unable to find job name: $job_opt\n";
+        exit(1);
+    }
+}
+# End cmd_opt == "status"
+
+
+#-----------------------------------------------------
+# Done.
+#-----------------------------------------------------
+print "Done.\n";
+
+?>
