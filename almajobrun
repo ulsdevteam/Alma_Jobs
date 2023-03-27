@@ -111,6 +111,9 @@ if (empty($name)) {
     exit(1);
 } 
 
+#--------------------------------------------------------
+# Execute the job.
+#--------------------------------------------------------
 print "Execute Job: $name\n";
 $key = searchForName($name, $jobs);
 
@@ -123,9 +126,7 @@ if ($key) {
    print "     Job ID: $job_id\n";
 
    if ($job_id) {
-       #--------------------------------------------------------
        # Execute the job.
-       #--------------------------------------------------------
        $job = $alma->jobs[$job_id];
        try {
            $job_instance = $job->submit();
