@@ -23,14 +23,14 @@ DESCRIPTION
 
 These scripts allow for the interaction and execution of Alma jobs against either the Alma sandbox or Alma production instances.  
 
-When each of the above scripts are run, there is an initial call to pull down the current list of jobs into cache files.  The cache files are kept for 24 hours before being refreshed at the next script run.  
+When the almajob script is run, there is an initial call to pull down the current list of Alma jobs into cache files.  The cache files are kept for 24 hours before being refreshed at the next script run.  Currently it is optional to simply remove the cache files before running the script to force it to re-download the current list of Alma jobs.  
 
 Options
 -------
 
 --cmd
 
-:  Sets the function to be run for the almajob script.
+:  Sets the function to be run for the almajob script.  This is one of "list", "run", or "status" referring to the option to simply list the jobs available for the environment or to run one of the jobs, or to obtain the current status of the job and id in question.
 
 --env
 
@@ -38,17 +38,17 @@ Options
 
 --job
 
-:  This is the name of the Alma job surrounded by quotes if there are spaces in the name of the job. 
+:  This is the name of the Alma job surrounded by quotes if there are spaces in the name of the job.  For example "ERP export using profile FINANCE".
 
 --id
 
-:  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.
+:  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.  This tends to be lengthy number.
 
 
 FILES
 =====
 *almajob.ini*
-:  Contains the API keys needed for both environments plus the domain in which you will be running the API calls from. Copy from almajob.ini.sample and update as needed for your environment.
+:  Contains the API keys needed for both environments plus the domain in which you will be running the API calls from.  There is a sample file included.  Make a copy of the file almajob.ini.sample to almajob.ini and update the file as needed for your environment.
 
 *.cache.jobs.sandbox*
 :  Contains the cached list of Alma jobs for the Alma sandbox environment.
@@ -65,6 +65,7 @@ BUGS
 
 1. Consider adding changes to where cache files are kept such as "--cache_dir" option.
 2. Consider adding an option to force cache updating at the time of the script run such as "--force".
+3. Consider adding an option to point to the almajob.ini file at the time of the script run such as "--ini-file".
 
 
 AUTHOR
