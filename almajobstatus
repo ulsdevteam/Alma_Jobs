@@ -27,39 +27,39 @@ $domain  = $config['domain'];
 #--------------------------------------------------------------
 $shortopts = "";
 $longopts = array(
-    "name:",
-    "instance:",
+    "job:",
+    "id:",
     "env:",
 );
 
 $opts = getopt($shortopts, $longopts);
 foreach (array_keys($opts) as $opt) switch ($opt) {
-    case 'name':
-      $name = $opts['name'];
+    case 'job':
+      $job_opt = $opts['job'];
       break;
-    case 'instance':
-      $instance = $opts['instance'];
+    case 'id':
+      $id_opt = $opts['id'];
       break;
     case 'env':
-      $environment = $opts['env'];
+      $env_opt = $opts['env'];
       break;
 }
 
-if (empty($name) || empty($instance) || empty($environment)) {
-    print "Usage: \n  almajobstatus --env \"{production|sandbox}\" --name \"{Job Name}\" --instance \"{Instance ID}\"\n\n";
+if (empty($job_opt) || empty($id_opt) || empty($env_opt)) {
+    print "Usage: \n  almajobstatus --env \"{production|sandbox}\" --job \"{Job Name}\" --id \"{Instance ID}\"\n\n";
     exit(1);
 }
 
 if (($environment != 'production') && ($environment != 'sandbox')) {
-    print "Usage: \n  almajobstatus --env \"{production|sandbox}\" --name \"{Job Name}\" --instance \"{Instance ID}\"\n\n";
+    print "Usage: \n  almajobstatus --env \"{production|sandbox}\" --job \"{Job Name}\" --id \"{Instance ID}\"\n\n";
     exit(1);
 }
 
 # Set environment API Key.
-if ($environment == "production") {
+if ($env_opt == "production") {
    $api_key = $api_key_production;
 }
-if ($environment == "sandbox") {
+if ($env_opt == "sandbox") {
    $api_key = $api_key_sandbox;
 }
 
@@ -70,7 +70,7 @@ $alma = new AlmaClient($api_key, $domain);
 $jobs = array();
 
 # File to cache array of jobs.
-$jobs_cache = ".cache.jobs.$environment";
+$jobs_cache = ".cache.jobs.$env_opt";
 
 # Get List of Jobs either by cache or directly from Alma.
 # Cache is set for a number of seconds (60 sec * 1440 min) = 1 day.
@@ -97,8 +97,8 @@ $statuses = getJobStatuses($alma);
 # Get Job Status
 #---------------------------------------------
 print "Checking...\n";
-print "     Job Name:           '$name'\n";
-$key = searchForName($name, $jobs);
+print "     Job Name:           '$job_opt'\n";
+$key = searchForName($job_opt, $jobs);
 
 $job_id = "";
 $job_name = "";
@@ -132,7 +132,7 @@ if ($key) {
    }
 
 } else {
-   print "Unable to find job name: $name\n";
+   print "Unable to find job name: $job_opt\n";
    exit(1);
 }
 

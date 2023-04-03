@@ -27,36 +27,35 @@ $domain  = $config['domain'];
 #--------------------------------------------------------------
 $shortopts = "";
 $longopts = array(
-    "name:",
-    "instance:",
+    "job:",
     "env:",
 );
 
 $opts = getopt($shortopts, $longopts);
 foreach (array_keys($opts) as $opt) switch ($opt) {
-    case 'name':
-      $name = $opts['name'];
+    case 'job':
+      $job_opt = $opts['job'];
       break;
     case 'env':
-      $environment = $opts['env'];
+      $env_opt = $opts['env'];
       break;
 }
 
-if ( empty($name) || empty($environment) ) {
-    print "Usage: \n  almajobrun --env \"{production|sandbox}\" --name \"{Job Name}\"\n\n";
+if ( empty($job_opt) || empty($env_opt) ) {
+    print "Usage: \n  almajobrun --env \"{production|sandbox}\" --job \"{Job Name}\"\n\n";
     exit(1);
 }
 
 if (($environment != 'production') && ($environment != 'sandbox')) {
-    print "Usage: \n  almajobrun --env \"{production|sandbox}\" --name \"{Job Name}\"\n\n";
+    print "Usage: \n  almajobrun --env \"{production|sandbox}\" --job \"{Job Name}\"\n\n";
     exit(1);
 }
 
 # Set environment API Key.
-if ($environment == "production") {
+if ($env_opt == "production") {
    $api_key = $api_key_production;
 }
-if ($environment == "sandbox") {
+if ($env_opt == "sandbox") {
    $api_key = $api_key_sandbox;
 }
 
@@ -67,7 +66,7 @@ $alma = new AlmaClient($api_key, $domain);
 $jobs = array();
 
 # File to cache array of jobs.
-$jobs_cache = ".cache.jobs.$environment";
+$jobs_cache = ".cache.jobs.$env_opt";
 
 # Get List of Jobs either by cache or directly from Alma.
 # Cache is set for a number of seconds (60 sec * 1440 min) = 1 day.
@@ -90,31 +89,11 @@ if (file_exists($jobs_cache) && (filemtime($jobs_cache) > (time() - 60 * 1440 ))
 #---------------------------------------------
 $statuses = getJobStatuses($alma);
 
-#---------------------------------------------
-# Read command line options.
-#---------------------------------------------
-$shortopts = "";
-$longopts = array(
-    "name:",
-);
-
-$opts = getopt($shortopts, $longopts);
-foreach (array_keys($opts) as $opt) switch ($opt) {
-    case 'name':
-      $name = $opts['name'];
-      break;
-}
-
-if (empty($name)) {
-    print "Usage: \n  almajobrun --name \"{Job Name}\"\n\n";
-    exit(1);
-} 
-
 #--------------------------------------------------------
 # Execute the job.
 #--------------------------------------------------------
-print "Execute Job: $name\n";
-$key = searchForName($name, $jobs);
+print "Execute Job: $job_opt\n";
+$key = searchForName($job_opt, $jobs);
 
 $job_name = "";
 $job_id = "";
@@ -155,7 +134,7 @@ if ($key) {
        print "Job Submited:  $job_submit_time\n";
    }
 } else {
-   print "Unable to find job name: $name\n";
+   print "Unable to find job name: $job_opt\n";
    exit(1);
 }
 
