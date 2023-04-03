@@ -6,9 +6,13 @@ SCRIPT
 ======
 
 **almajob** - Combined command that encapsulates all of the following.
+
 **almajoblist** - Lists all of the jobs of an Alma environment.
+
 **almajobrun** - Runs a specified job in the Alma environment.
+
 **almajobstatus** - Obtains the job status of a job in the Alma environment.
+
 
 SYNOPSIS
 ========
