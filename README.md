@@ -2,23 +2,12 @@
 
 Utilities to run an Alma Job from a command line.
 
-## Scripts
-**almajoblist** - Used to list all jobs available for the Alma environment.
-
-**almajobrun** - Used to execute an Alma job remotely given the name of the job from almajoblist.
-
-**almajobstatus** - Used to determine the status of an Alma job that has been run.
+## Script
 
 **almajob** - Combined command that encapsulates all of the above.
 
 SYNOPSIS
 ========
-
-**almajoblist** \[**--env** {sandbox|production}\]
-
-**almajobrun** \[**--env** {sandbox|production}\] \[**--job** {Job Name}\]
-
-**almajobstatus** \[**--env** {sandbox|production}\] \[**--job** {Job Name}\] \[**--id** {Job instance id number}\]
 
 **almajob** \[**--env** {sandbox|production}\] \[**--cmd** {list|run|status}\] 
 
@@ -41,15 +30,15 @@ Options
 
 --cmd
 
-:  Sets the function to be run for the alma_job script.
+:  Sets the function to be run for the almajob script.
 
 --env
 
-:  Sets the Alma environment you will be runing the command against.  This is either 'sandbox' or 'production'.
+:  Sets the Alma environment you will be runing the almajob command against.  This is either 'sandbox' or 'production'.
 
 --job
 
-:  This is the name of the Alma job as listed surrounded by quotes if there are spaces in the name of the job. 
+:  This is the name of the Alma job surrounded by quotes if there are spaces in the name of the job. 
 
 --id
 
@@ -74,15 +63,13 @@ FILES
 BUGS
 ====
 
-1. Need to update parameters across scripts.
-2. Consider removing the individual scripts in favor of the "alma_job" script.
-3. Consider adding changes to where cache files are kept such as "--cache_dir" option.
-4. Consider adding an option to force cache updating at the time of the script run such as "--force".
+1. Consider adding changes to where cache files are kept such as "--cache_dir" option.
+2. Consider adding an option to force cache updating at the time of the script run such as "--force".
 
 
 AUTHOR
 ======
-Brian Gregg <bdgregg@pitt.edu>
+Brian Gregg <bdgregg@pitt.edu> at the University of Pittsburgh, University Library System (ULS).
 
 
 
