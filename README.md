@@ -59,7 +59,7 @@ Options
 FILES
 =====
 *almajob.ini*
-:  Contains the API keys needed for both environments plus the domain in which you will be running the API calls from.
+:  Contains the API keys needed for both environments plus the domain in which you will be running the API calls from. Copy from almajob.ini.sample and update as needed for your environment.
 
 *.cache.jobs.sandbox*
 :  Contains the cached list of Alma jobs for the Alma sandbox environment.
@@ -74,6 +74,10 @@ FILES
 BUGS
 ====
 
+1. Need to update parameters across scripts.
+2. Consider removing the individual scripts in favor of the "alma_job" script.
+3. Consider adding changes to where cache files are kept such as "--cache_dir" option.
+4. Consider adding an option to force cache updating at the time of the script run such as "--force".
 
 
 AUTHOR
