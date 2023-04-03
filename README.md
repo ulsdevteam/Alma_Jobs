@@ -1,10 +1,14 @@
-# Alma_Jobs  ##DRAFT##
+# Alma_Jobs 
 
 Utilities to run an Alma Job from a command line.
 
-## Script
+SCRIPT
+======
 
-**almajob** - Combined command that encapsulates all of the above.
+**almajob** - Combined command that encapsulates all of the following.
+**almajoblist** - Lists all of the jobs of an Alma environment.
+**almajobrun** - Runs a specified job in the Alma environment.
+**almajobstatus** - Obtains the job status of a job in the Alma environment.
 
 SYNOPSIS
 ========
@@ -30,8 +34,7 @@ REQUIREMENTS
 ============
 Software Requirements:
 - php 5.x or newer.
-- composer 1.x or newer.
-- internet access (to download composer requirements).
+- php composer 1.x or newer.
 
 
 INSTALLATION
