@@ -16,9 +16,9 @@ SYNOPSIS
 
 **almajoblist** \[**--env** {sandbox|production}\]
 
-**almajobrun** \[**--env** {sandbox|production}\] \[**--name** {Job Name}\]
+**almajobrun** \[**--env** {sandbox|production}\] \[**--job** {Job Name}\]
 
-**almajobstatus** \[**--env** {sandbox|production}\] \[**--name** {Job Name}\] \[**--instance** {Job instance id number}\]
+**almajobstatus** \[**--env** {sandbox|production}\] \[**--job** {Job Name}\] \[**--id** {Job instance id number}\]
 
 **almajob** \[**--env** {sandbox|production}\] \[**--cmd** {list|run|status}\] 
 
@@ -26,7 +26,7 @@ If **--cmd** = list, no other options are required.
 
 If **--cmd** = run, then \[**--job** {Job Name}\] is required.
 
-If **--cmd** = status, then both \[**--job** {Job Name}\] and \[**--instance** {Job instance id number}\] is required.
+If **--cmd** = status, then both \[**--job** {Job Name}\] and \[**--id** {Job instance id number}\] is required.
 
 
 DESCRIPTION
@@ -39,13 +39,16 @@ When each of the above scripts are run, there is an initial call to pull down th
 Options
 -------
 
+--cmd
+:  Sets the function to be run for the alma_job script.
+
 --env
 :  Sets the Alma environment you will be runing the command against.  This is either 'sandbox' or 'production'.
 
---job | --name
+--job
 :  This is the name of the Alma job as listed surrounded by quotes if there are spaces in the name of the job. 
 
---instance
+--id
 :  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.
 
 
