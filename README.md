@@ -14,13 +14,27 @@ Utilities to run an Alma Job from a command line.
 SYNOPSIS
 ========
 
-| **almajoblist** \[**--env** {sandbox|production}\]
+**almajoblist** \[**--env** {sandbox|production}\]
+
+**almajobrun** \[**--env** {sandbox|production}\] \[**--name** {Job Name}\]
+
+**almajobstatus** \[**--env** {sandbox|production}\] \[**--name** {Job Name}\] \[**--instance** {Job instance id number}\]
+
+**almajob** \[**--env** {sandbox|production}\] \[**--cmd** {list|run|status}\] 
+
+If **--cmd** = list, no other options are required.
+
+If **--cmd** = run, then \[**--job** {Job Name}\] is required.
+
+If **--cmd** = status, then both \[**--job** {Job Name}\] and \[**--instance** {Job instance id number}\] is required.
 
 
 DESCRIPTION
 ===========
 
 These scripts allow for the interaction and execution of Alma jobs against either the Alma sandbox or Alma production instances.  
+
+When each of the above scripts are run, there is an initial call to pull down the current list of jobs into cache files.  The cache files are kept for 24 hours before being refreshed at the next script run.  
 
 Options
 -------
