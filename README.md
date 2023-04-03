@@ -25,6 +25,35 @@ These scripts allow for the interaction and execution of Alma jobs against eithe
 
 When the almajob script is run, there is an initial call to pull down the current list of Alma jobs into cache files.  The cache files are kept for 24 hours before being refreshed at the next script run.  Currently it is optional to simply remove the cache files before running the script to force it to re-download the current list of Alma jobs.  
 
+
+REQUIREMENTS
+============
+Software Requirements:
+- php 5.x or newer.
+- composer 1.x or newer.
+- internet access (to download composer requirements).
+
+
+INSTALLATION
+============
+In the folder in which you wish to install Alma_Jobs, change to that folder then run the following:
+```shell
+git clone https://github.com/ulsdevteam/Alma_Jobs
+```
+
+Then, change directory into the Alma_Jobs folder and run the following command:
+```shell
+composer install
+```
+
+Once complete, copy the almajob.ini.sample to almajob.ini and update the file with your production and sandbox API keys.
+```shell
+cp almajob.ini.sample almajob.ini
+vi almajob.ini
+```
+
+
+
 Options
 -------
 
