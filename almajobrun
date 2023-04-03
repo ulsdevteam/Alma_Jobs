@@ -46,7 +46,7 @@ if ( empty($job_opt) || empty($env_opt) ) {
     exit(1);
 }
 
-if (($environment != 'production') && ($environment != 'sandbox')) {
+if (($env_opt != 'production') && ($env_opt != 'sandbox')) {
     print "Usage: \n  almajobrun --env \"{production|sandbox}\" --job \"{Job Name}\"\n\n";
     exit(1);
 }
