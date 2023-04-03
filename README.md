@@ -40,15 +40,19 @@ Options
 -------
 
 --cmd
+
 :  Sets the function to be run for the alma_job script.
 
 --env
+
 :  Sets the Alma environment you will be runing the command against.  This is either 'sandbox' or 'production'.
 
 --job
+
 :  This is the name of the Alma job as listed surrounded by quotes if there are spaces in the name of the job. 
 
 --id
+
 :  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.
 
 
