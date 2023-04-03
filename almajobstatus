@@ -50,7 +50,7 @@ if (empty($job_opt) || empty($id_opt) || empty($env_opt)) {
     exit(1);
 }
 
-if (($environment != 'production') && ($environment != 'sandbox')) {
+if (($env_opt != 'production') && ($env_opt != 'sandbox')) {
     print "Usage: \n  almajobstatus --env \"{production|sandbox}\" --job \"{Job Name}\" --id \"{Instance ID}\"\n\n";
     exit(1);
 }
@@ -107,7 +107,7 @@ $job_instance = "";
 if ($key) {
    $job_id = $jobs[$key]['ID'];
    $job_name = $jobs[$key]['NAME'];
-   $job_instance_id = $instance;
+   $job_instance_id = $id_opt;
 
    print "     Job ID:             $job_id\n";
 
