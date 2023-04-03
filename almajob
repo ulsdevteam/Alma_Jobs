@@ -229,9 +229,14 @@ if ($cmd_opt == "status") {
             print "     Job Instance ID:    $job_instance_id\n";
 
             # Get Job and Instance Status
-            $instance = $job->instances[$job_instance_id];
-            $instance->init();
-            $instance_info = json_encode($instance);
+            try {
+                $instance = $job->instances[$job_instance_id];
+                $instance->init();
+                $instance_info = json_encode($instance);
+            } catch (Exception $e) {
+                echo "     Error: Caught exception: ", $e->getMessage(), "\n";
+                exit(1);
+            }
 
             $job_submit_time = zuluToLocal($instance->submit_time);
             $job_start_time = zuluToLocal($instance->start_time);
