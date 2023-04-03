@@ -20,13 +20,7 @@ SYNOPSIS
 DESCRIPTION
 ===========
 
-In general there are parameters used for all three utilities:
-
---env - This will either be "production" or "sandbox" and are the only two choices for this option.
-
---name - This is the name of the job listed by the almajoblist command and is needed for the almajobrun and almajobstatus commands.
-
---instance - This is the instance (Process ID) of the job that was run.  This is a unique identifier for the run of the job.
+These scripts allow for the interaction and execution of Alma jobs against either the Alma sandbox or Alma production instances.  
 
 Options
 -------
@@ -34,8 +28,11 @@ Options
 --env
 :  Sets the Alma environment you will be runing the command against.  This is either 'sandbox' or 'production'.
 
---job
-:  This is the name of the Alma job as listed surrounded by quotes if there are spaces in the name of the job.
+--job | --name
+:  This is the name of the Alma job as listed surrounded by quotes if there are spaces in the name of the job. 
+
+--instance
+:  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.
 
 
 FILES
@@ -48,6 +45,9 @@ FILES
 
 *.cache.jobs.production*
 :  Contains the cached list of Amla jobs for the Alma production environment.
+
+*.cache.codetable.systemJobStatus*
+:  Contains the cached list of the sysytemJobStatus table.
 
 
 BUGS
