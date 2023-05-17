@@ -80,6 +80,10 @@ Options
 
 :  This is the instance id number associated with the job.  This uniquely defines each run of the job.  This is equivalent to the "Process ID" in the Admin -> Monitor Jobs interface.  This tends to be lengthy number.
 
+--cache_dir
+
+:  This is to allow the specification of where the job cache is kept.  By default it chooses the directory of the running script.
+
 
 FILES
 =====
@@ -99,9 +103,8 @@ FILES
 BUGS
 ====
 
-1. Consider adding changes to where cache files are kept such as "--cache_dir" option.
-2. Consider adding an option to force cache updating at the time of the script run such as "--force".
-3. Consider adding an option to point to the almajob.ini file at the time of the script run such as "--ini-file".
+1. Consider adding an option to force cache updating at the time of the script run such as "--force".
+2. Consider adding an option to point to the almajob.ini file at the time of the script run such as "--ini-file".
 
 
 AUTHOR
