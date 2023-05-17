@@ -28,12 +28,16 @@ $domain  = $config['domain'];
 $shortopts = "";
 $longopts = array(
     "env:",
+    "cache_dir:",
 );
 
 $opts = getopt($shortopts, $longopts);
 foreach (array_keys($opts) as $opt) switch ($opt) {
     case 'env':
       $environment = $opts['env'];
+      break;
+    case 'cache_dir':
+      $cache_dir = $opts['cache_dir'];
       break;
 }
 
@@ -62,7 +66,12 @@ $alma = new AlmaClient($api_key, $domain);
 $jobs = array();
 
 # File to cache array of jobs.
-$jobs_cache = ".cache.jobs.$environment";
+if (empty($cache_dir)) {
+    $script_dir = dirname(__FILE__);
+    $jobs_cache = "$script_dir/.cache.jobs.$environment";
+} else {
+    $jobs_cache = "$cache_dir/.cache.jobs.$environment";
+}
 
 # Get List of Jobs either by cache or directly from Alma.
 # Cache is set for a number of seconds (60 sec * 1440 min) = 1 day.
