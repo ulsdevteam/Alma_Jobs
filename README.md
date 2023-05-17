@@ -82,7 +82,7 @@ Options
 
 --cache_dir
 
-:  This is to allow the specification of where the job cache is kept.  By default it chooses the directory of the running script.
+:  This is to allow the specification of the directory where the job cache is kept.  By default it chooses the directory of the running script.
 
 
 FILES
