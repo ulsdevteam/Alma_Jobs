@@ -195,15 +195,6 @@ if ($cmd_opt == "run") {
 
             # Executed Job was:
             print "Job Instance ID: $instance_id\n";
-
-            # Get Job and Instance Status
-            $instance = $job->instances[$instance_id];
-            $instance->init();
-            $instance_info = json_encode($instance);
-
-            $job_submit_time = zuluToLocal($instance->submit_time);
-            $job_start_time = zuluToLocal($instance->start_time);
-            print "Job Submited:  $job_submit_time\n";
         }
     } else {
         print "Unable to find job name: $job_opt\n";
